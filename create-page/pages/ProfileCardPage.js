@@ -25,34 +25,27 @@ function ProfileCardPage(){
   toolbar.style.gap = '10px';
   toolbar.style.alignItems = 'center';
 
-  const reloadBtn = document.createElement('button');
-  reloadBtn.className = 'stl-btn';
-  reloadBtn.textContent = '↻ Reload Card';
-  reloadBtn.style.background = 'transparent';
-  reloadBtn.style.border = '1px solid var(--grid)';
-  reloadBtn.style.color = 'var(--green)';
-  reloadBtn.style.padding = '8px 14px';
-  reloadBtn.style.borderRadius = '3px';
-  reloadBtn.style.cursor = 'pointer';
-  reloadBtn.style.fontFamily = 'var(--mono)';
-  reloadBtn.style.fontSize = '13px';
-
-  const openBtn = document.createElement('button');
-  openBtn.textContent = 'Open in New Tab';
-  openBtn.className = 'stl-btn';
-  openBtn.style.background = 'transparent';
-  openBtn.style.border = '1px solid var(--grid)';
-  openBtn.style.color = 'var(--green)';
-  openBtn.style.padding = '8px 14px';
-  openBtn.style.borderRadius = '3px';
-  openBtn.style.cursor = 'pointer';
-  openBtn.style.fontFamily = 'var(--mono)';
-  openBtn.style.fontSize = '13px';
-
+  function mkBtn(text){
+    const b = document.createElement('button');
+    b.className = 'stl-btn';
+    b.textContent = text;
+    b.style.background = 'transparent';
+    b.style.border = '1px solid var(--grid)';
+    b.style.color = 'var(--green)';
+    b.style.padding = '8px 14px';
+    b.style.borderRadius = '3px';
+    b.style.cursor = 'pointer';
+    b.style.fontFamily = 'var(--mono)';
+    b.style.fontSize = '13px';
+    return b;
+  }
+  const reloadBtn = mkBtn('\u21bb Reload Card');
+  const openBtn   = mkBtn('Open in New Tab');
   toolbar.appendChild(reloadBtn);
   toolbar.appendChild(openBtn);
   el.appendChild(toolbar);
 
+  /* ---- preview frame ---- */
   const frameWrap = document.createElement('div');
   frameWrap.style.flex = '1';
   frameWrap.style.border = '1px solid var(--grid)';
@@ -62,24 +55,90 @@ function ProfileCardPage(){
   frameWrap.style.background = 'var(--bg2)';
   frameWrap.style.minHeight = '500px';
 
+  /* Virtual "stage": a normal-window size where the card lays out correctly.
+     We render the standalone page at this fixed size, then scale the whole
+     iframe down to fit the panel. This shows the ENTIRE card (centered),
+     instead of clipping it because the panel is short/wide. */
+  const STAGE_W = 1280;
+  const STAGE_H = 900;
+
   const iframe = document.createElement('iframe');
   iframe.src = '../index.html';
-  iframe.style.width = '100%';
-  iframe.style.height = '100%';
+  iframe.setAttribute('title', 'Profile Card Preview');
+  iframe.style.position = 'absolute';
+  iframe.style.top = '0';
+  iframe.style.left = '0';
+  iframe.style.width = STAGE_W + 'px';
+  iframe.style.height = STAGE_H + 'px';
   iframe.style.border = '0';
   iframe.style.display = 'block';
-  iframe.setAttribute('title', 'Profile Card Preview');
+  iframe.style.transformOrigin = 'top left';
 
   frameWrap.appendChild(iframe);
   el.appendChild(frameWrap);
 
-  reloadBtn.addEventListener('click', () => {
-    iframe.src = '../index.html?t=' + Date.now();
+  /* ---- scale the stage to fit the panel (contain + center) ---- */
+  function fitStage(){
+    const w = frameWrap.clientWidth;
+    const h = frameWrap.clientHeight;
+    if(!w || !h) return;
+    const scale = Math.min(w / STAGE_W, h / STAGE_H);
+    const offX = (w - STAGE_W * scale) / 2;
+    const offY = (h - STAGE_H * scale) / 2;
+    iframe.style.transform = 'translate(' + offX + 'px,' + offY + 'px) scale(' + scale + ')';
+  }
+
+  if('ResizeObserver' in window){
+    new ResizeObserver(fitStage).observe(frameWrap);
+  } else {
+    window.addEventListener('resize', fitStage);
+  }
+
+  /* ---- best-effort: make the ASCII block fit its column inside the iframe.
+     Works only when same-origin (e.g. served from a local server). On
+     file:// this throws and is silently ignored; the scale above still
+     fixes the overall clipping. ---- */
+  function injectAsciiFit(){
+    try{
+      const doc = iframe.contentDocument;
+      const win = iframe.contentWindow;
+      if(!doc || !win) return;
+      const ascii = doc.getElementById('ascii');
+      if(!ascii || win.__asciiFitInstalled) return;
+      win.__asciiFitInstalled = true;
+      const fit = function(){
+        const wrap = ascii.parentElement;
+        if(!wrap) return;
+        const aw = wrap.clientWidth, ah = wrap.clientHeight;
+        if(!aw || !ah) return;
+        ascii.style.fontSize = '10px';
+        const cw = ascii.scrollWidth || 1, ch = ascii.scrollHeight || 1;
+        let fs = 10 * Math.min(aw / cw, ah / ch);
+        if(fs < 3) fs = 3; if(fs > 16) fs = 16;
+        ascii.style.fontSize = fs + 'px';
+      };
+      win.addEventListener('resize', fit);
+      win.requestAnimationFrame(function(){ win.requestAnimationFrame(fit); });
+      setTimeout(fit, 200);
+      setTimeout(fit, 600);
+    }catch(_){ /* cross-origin: ignore */ }
+  }
+
+  iframe.addEventListener('load', function(){
+    fitStage();
+    injectAsciiFit();
   });
 
-  openBtn.addEventListener('click', () => {
+  reloadBtn.addEventListener('click', function(){
+    iframe.src = '../index.html?t=' + Date.now();
+  });
+  openBtn.addEventListener('click', function(){
     window.open('../index.html', '_blank');
   });
+
+  /* initial */
+  requestAnimationFrame(fitStage);
+  setTimeout(fitStage, 120);
 
   return el;
 }
