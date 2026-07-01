@@ -2,6 +2,7 @@ const PAGE_REGISTRY = [
   { path: '/',         label: 'Home',           icon: '►', component: HomePage },
   { path: '/stl',     label: 'STL Uploader',   icon: '▣', component: StlUploaderPage },
   { path: '/gif',     label: 'GIF Uploader',   icon: '▤', component: GifUploaderPage },
+  { path: '/projects',label: 'Projects',       icon: '◆', component: ProjectsPage },
   { path: '/custom',  label: 'Customization',  icon: '◈', component: CustomizationPage },
   { path: '/card',    label: 'Profile Card',   icon: '◉', component: ProfileCardPage },
 ];

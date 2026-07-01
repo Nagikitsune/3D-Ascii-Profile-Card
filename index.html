@@ -288,6 +288,191 @@
     .music-volume{ width:72px; }
   }
 
+  /* ===== Workspace / Projects Section ===== */
+  .workspace{
+    position:relative; z-index:1;
+    width:100%;
+    max-width:520px;
+    margin: 20px auto 0;
+  }
+  .workspace-bar{
+    display:flex; align-items:center; gap:8px;
+    padding:8px 14px;
+    background:rgba(46,0,48,.95);
+    border:1px solid var(--grid);
+    border-radius:8px 8px 0 0;
+    border-bottom:0;
+    cursor:pointer;
+    user-select:none;
+    transition:background .12s;
+  }
+  .workspace-bar:hover{ background:rgba(60,0,64,.95); }
+  .workspace-bar .ws-icon{ color:var(--yellow); font-size:14px; }
+  .workspace-bar .ws-title{ color:var(--green-dim); font-size:12px; letter-spacing:.08em; }
+  .workspace-bar .ws-count{ margin-left:auto; color:var(--green-faint); font-size:11px; }
+  .workspace-bar .ws-expand{ color:var(--green-faint); font-size:11px; cursor:pointer; margin-left:8px; }
+  .workspace-bar .ws-expand:hover{ color:var(--hi); }
+  .workspace-body{
+    max-height:0;
+    overflow:hidden;
+    transition:max-height .35s ease-out;
+    background: linear-gradient(180deg, rgba(18,0,20,.94), rgba(5,0,7,.94));
+    border:1px solid var(--grid);
+    border-top:0;
+    border-radius:0 0 8px 8px;
+  }
+  .workspace-body.open{
+    max-height:600px;
+  }
+  .workspace-scroll{
+    max-height:280px;
+    overflow-y:auto;
+    padding:12px 14px;
+    scrollbar-width:thin;
+    scrollbar-color:var(--grid) transparent;
+  }
+  .workspace-scroll::-webkit-scrollbar{ width:4px; }
+  .workspace-scroll::-webkit-scrollbar-track{ background:transparent; }
+  .workspace-scroll::-webkit-scrollbar-thumb{ background:var(--grid); border-radius:2px; }
+
+  .project-card{
+    display:flex; flex-direction:column; gap:6px;
+    padding:12px 14px;
+    border:1px solid var(--grid);
+    border-radius:6px;
+    background:rgba(46,0,48,.12);
+    transition:background .12s, border-color .12s, transform .12s;
+    cursor:pointer;
+    text-decoration:none;
+    color:var(--green);
+    margin-bottom:8px;
+  }
+  .project-card:last-child{ margin-bottom:0; }
+  .project-card:hover{
+    background:rgba(46,0,48,.3);
+    border-color:var(--green-faint);
+    transform:translateX(3px);
+  }
+  .project-card .p-name{
+    font-family:var(--display);
+    font-size:18px;
+    color:var(--hi);
+    letter-spacing:.04em;
+  }
+  .project-card .p-desc{
+    font-size:13px;
+    color:var(--green-dim);
+    line-height:1.4;
+  }
+  .project-card .p-tags{
+    display:flex; gap:6px; flex-wrap:wrap;
+    margin-top:4px;
+  }
+  .project-card .p-tag{
+    font-size:10px;
+    padding:2px 8px;
+    border:1px solid var(--grid);
+    border-radius:999px;
+    color:var(--green-faint);
+    background:rgba(46,0,48,.2);
+    letter-spacing:.06em;
+  }
+  .project-card .p-arrow{
+    margin-left:auto;
+    color:var(--green-faint);
+    font-size:16px;
+  }
+
+  /* ===== Full-page Projects Overlay ===== */
+  .projects-overlay{
+    position:fixed; inset:0; z-index:100;
+    background:rgba(2,2,2,.92);
+    backdrop-filter:blur(6px);
+    display:none;
+    flex-direction:column;
+    padding:clamp(20px,4vw,48px);
+    overflow-y:auto;
+  }
+  .projects-overlay.open{ display:flex; }
+  .projects-overlay-header{
+    display:flex; align-items:center; gap:16px;
+    margin-bottom:24px;
+  }
+  .projects-overlay-header h2{
+    font-family:var(--display);
+    font-size:clamp(24px,4vw,40px);
+    color:var(--hi);
+    margin:0;
+    letter-spacing:2px;
+  }
+  .projects-overlay-close{
+    margin-left:auto;
+    background:transparent;
+    border:1px solid var(--grid);
+    color:var(--green-dim);
+    font-family:var(--mono);
+    font-size:14px;
+    padding:8px 16px;
+    border-radius:5px;
+    cursor:pointer;
+    transition:color .12s, border-color .12s;
+  }
+  .projects-overlay-close:hover{
+    color:var(--hi);
+    border-color:var(--green-faint);
+  }
+  .projects-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(320px, 1fr));
+    gap:16px;
+    padding-bottom:40px;
+  }
+  .project-card-lg{
+    display:flex; flex-direction:column; gap:8px;
+    padding:18px 20px;
+    border:1px solid var(--grid);
+    border-radius:8px;
+    background:rgba(18,0,20,.55);
+    transition:background .12s, border-color .12s, transform .12s;
+    cursor:pointer;
+    text-decoration:none;
+    color:var(--green);
+  }
+  .project-card-lg:hover{
+    background:rgba(46,0,48,.3);
+    border-color:var(--green-faint);
+    transform:translateY(-2px);
+  }
+  .project-card-lg .p-lg-name{
+    font-family:var(--display);
+    font-size:22px;
+    color:var(--hi);
+    letter-spacing:.04em;
+  }
+  .project-card-lg .p-lg-desc{
+    font-size:14px;
+    color:var(--green-dim);
+    line-height:1.5;
+  }
+  .project-card-lg .p-lg-tags{
+    display:flex; gap:6px; flex-wrap:wrap;
+    margin-top:4px;
+  }
+  .project-card-lg .p-lg-tag{
+    font-size:11px;
+    padding:3px 10px;
+    border:1px solid var(--grid);
+    border-radius:999px;
+    color:var(--green-faint);
+    background:rgba(46,0,48,.2);
+    letter-spacing:.06em;
+  }
+  .project-card-lg .p-lg-arrow{
+    margin-left:auto;
+    color:var(--green-faint);
+    font-size:18px;
+  }
+
 </style>
 </head>
 <body>
@@ -330,8 +515,29 @@
         <div class="prompt"><span id="promptText"></span><span class="cursor"></span></div>
       </div>
       </section>
+
+      <!-- Workspace / Projects Section -->
+      <section class="workspace" id="workspace" aria-label="workspace de projetos">
+        <div class="workspace-bar" id="wsBar">
+          <span class="ws-icon">◆</span>
+          <span class="ws-title">workspace</span>
+          <span class="ws-count" id="wsCount">0 projetos</span>
+          <span class="ws-expand" id="wsExpand">[ver todos]</span>
+        </div>
+        <div class="workspace-body" id="wsBody">
+          <div class="workspace-scroll" id="wsScroll"></div>
+        </div>
+      </section>
     </section>
   </main>
+  <!-- Full-page Projects Overlay -->
+  <div class="projects-overlay" id="projectsOverlay">
+    <div class="projects-overlay-header">
+      <h2>◆ PROJETOS</h2>
+      <button class="projects-overlay-close" id="projectsClose">[fechar]</button>
+    </div>
+    <div class="projects-grid" id="projectsGrid"></div>
+  </div>
 
 <!-- 3D model loaded from assets/model.stl at runtime -->
 
@@ -355,6 +561,22 @@ let CONFIG = {
     { cmd: "instagram", val: "Seu_nome",      url: "https://www.instagram.com/seu_instagram" },
     { cmd: "Linkedin",  val: "Seu_nome", url: "https://www.linkedin.com/in/seu_linkedin" },
     { cmd: "discord",   val: "Seu_nome",        url: "https://discord.com/users/seu_user" },
+  ],
+
+  // -- Projetos (adicione/remova quantos quiser) --------------------------------
+  projects: [
+    {
+      name: "Projeto 1",
+      desc: "Descrição breve do projeto.",
+      tags: ["Python", "ML"],
+      url: "https://github.com/Seu_nome/projeto1",
+    },
+    {
+      name: "Projeto 2",
+      desc: "Outro projeto interessante.",
+      tags: ["JavaScript", "React"],
+      url: "https://github.com/Seu_nome/projeto2",
+    },
   ],
 
   // -- Modelo 3D (troque por qualquer .stl em assets/) -------------------------
@@ -394,6 +616,10 @@ let CONFIG = {
       if (Array.isArray(saved.links) && saved.links.length) {
         CONFIG.links = saved.links;
       }
+      // Projects (array of objects)
+      if (Array.isArray(saved.projects) && saved.projects.length) {
+        CONFIG.projects = saved.projects;
+      }
       // Light vector
       if (Array.isArray(saved.LIGHT) && saved.LIGHT.length === 3) {
         CONFIG.LIGHT = saved.LIGHT;
@@ -406,6 +632,7 @@ let CONFIG = {
       if (saved.showSprite !== undefined) CONFIG._showSprite = saved.showSprite;
       if (saved.showMusicPanel !== undefined) CONFIG._showMusicPanel = saved.showMusicPanel;
       if (saved.showLinks !== undefined) CONFIG._showLinks = saved.showLinks;
+      if (saved.showWorkspace !== undefined) CONFIG._showWorkspace = saved.showWorkspace;
       if (saved.spriteUrl) CONFIG._spriteUrl = saved.spriteUrl;
     }
   } catch(e) { /* ignore malformed config */ }
@@ -793,6 +1020,10 @@ function applyDaedalusDisplay(){
     var lk = document.getElementById('links');
     if (lk) lk.style.display = 'none';
   }
+  if (CONFIG._showWorkspace === false) {
+    var ws = document.getElementById('workspace');
+    if (ws) ws.style.display = 'none';
+  }
 
   var spriteImg = document.querySelector('.header-sprite');
   if (spriteImg) {
@@ -816,12 +1047,130 @@ function hexA(hex, a){
   return 'rgba(' + r + ',' + g + ',' + b + ',' + a + ')';
 }
 
-setModel(proceduralModel(Math.min(CONFIG.POINTS, 6000)));
+/* ===== Workspace / Projects Rendering ===== */
+function renderWorkspace(){
+  var scroll = document.getElementById('wsScroll');
+  var count = document.getElementById('wsCount');
+  if (!scroll) return;
+  var projects = CONFIG.projects || [];
+  count.textContent = projects.length + ' projeto' + (projects.length !== 1 ? 's' : '');
+  scroll.innerHTML = '';
+  projects.forEach(function(p, i){
+    var card = document.createElement('a');
+    card.className = 'project-card';
+    card.href = p.url || '#';
+    card.target = p.url ? '_blank' : '';
+    card.rel = p.url ? 'noopener noreferrer' : '';
+    var tagsHTML = (p.tags || []).map(function(t){ return '<span class="p-tag">' + t + '</span>'; }).join('');
+    card.innerHTML = '<div class="p-name">' + p.name + ' <span class="p-arrow">▸</span></div>' +
+      '<div class="p-desc">' + (p.desc || '') + '</div>' +
+      (tagsHTML ? '<div class="p-tags">' + tagsHTML + '</div>' : '');
+    scroll.appendChild(card);
+  });
+}
+
+function renderProjectsOverlay(){
+  var grid = document.getElementById('projectsGrid');
+  if (!grid) return;
+  var projects = CONFIG.projects || [];
+  grid.innerHTML = '';
+  projects.forEach(function(p){
+    var card = document.createElement('a');
+    card.className = 'project-card-lg';
+    card.href = p.url || '#';
+    card.target = p.url ? '_blank' : '';
+    card.rel = p.url ? 'noopener noreferrer' : '';
+    var tagsHTML = (p.tags || []).map(function(t){ return '<span class="p-lg-tag">' + t + '</span>'; }).join('');
+    card.innerHTML = '<div class="p-lg-name">' + p.name + ' <span class="p-lg-arrow">▸</span></div>' +
+      '<div class="p-lg-desc">' + (p.desc || '') + '</div>' +
+      (tagsHTML ? '<div class="p-lg-tags">' + tagsHTML + '</div>' : '');
+    grid.appendChild(card);
+  });
+}
+
+function initWorkspace(){
+  var bar = document.getElementById('wsBar');
+  var body = document.getElementById('wsBody');
+  var expand = document.getElementById('wsExpand');
+  var overlay = document.getElementById('projectsOverlay');
+  var closeBtn = document.getElementById('projectsClose');
+  var grid = document.getElementById('projectsGrid');
+
+  function renderProjects(){
+    var scroll = document.getElementById('wsScroll');
+    var count = document.getElementById('wsCount');
+    if (!scroll) return;
+    var projects = CONFIG.projects || [];
+    count.textContent = projects.length + ' projeto' + (projects.length !== 1 ? 's' : '');
+    scroll.innerHTML = '';
+    grid.innerHTML = '';
+    projects.forEach(function(p){
+      // Workspace card
+      var card = document.createElement('a');
+      card.className = 'project-card';
+      card.href = p.url || '#';
+      card.target = p.url ? '_blank' : '';
+      card.rel = p.url ? 'noopener noreferrer' : '';
+      var tagsHTML = (p.tags || []).map(function(t){ return '<span class="p-tag">' + t + '</span>'; }).join('');
+      card.innerHTML = '<div class="p-name">' + p.name + ' <span class="p-arrow">▸</span></div>' +
+        '<div class="p-desc">' + (p.desc || '') + '</div>' +
+        (tagsHTML ? '<div class="p-tags">' + tagsHTML + '</div>' : '');
+      scroll.appendChild(card);
+
+      // Full-page grid card
+      var lg = document.createElement('a');
+      lg.className = 'project-card-lg';
+      lg.href = p.url || '#';
+      lg.target = p.url ? '_blank' : '';
+      lg.rel = p.url ? 'noopener noreferrer' : '';
+      lg.innerHTML = '<div class="p-lg-name">' + p.name + ' <span class="p-lg-arrow">▸</span></div>' +
+        '<div class="p-lg-desc">' + (p.desc || '') + '</div>' +
+        (tagsHTML ? '<div class="p-lg-tags">' + tagsHTML + '</div>' : '');
+      grid.appendChild(lg);
+    });
+  }
+
+  // Initial render
+  renderProjects();
+
+  // Toggle workspace body
+  bar.addEventListener('click', function(e){
+    if (e.target.id === 'wsExpand') return;
+    body.classList.toggle('open');
+  });
+
+  // Expand to full-page overlay
+  expand.addEventListener('click', function(e){
+    e.stopPropagation();
+    renderProjectsOverlay();
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  });
+
+  // Close overlay
+  closeBtn.addEventListener('click', function(){
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+  });
+  overlay.addEventListener('click', function(e){
+    if (e.target === overlay) {
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+  });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && overlay.classList.contains('open')) {
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+  });
+}
 ax = CONFIG.TILT_X;
 ay = -25;
 requestAnimationFrame(loop);
 loadModelSTL();
 run();
+initWorkspace();
 </script>
 
 <script>

@@ -41,6 +41,7 @@ function CustomizationPage() {
     showSprite: true,
     showMusicPanel: true,
     showLinks: true,
+    showWorkspace: true,
     asciiStatusText: "ascii~3d_renderer loaded",
     layoutMode: "auto", // auto | side-by-side | stacked
   };
@@ -484,6 +485,7 @@ requestAnimationFrame(function(){requestAnimationFrame(fitAscii);});setTimeout(f
   visS.body.appendChild(toggleRow("Show Sprite / GIF", "showSprite"));
   visS.body.appendChild(toggleRow("Show Music Panel", "showMusicPanel"));
   visS.body.appendChild(toggleRow("Show Links", "showLinks"));
+  visS.body.appendChild(toggleRow("Show Workspace / Projects", "showWorkspace"));
   editor.appendChild(visS.wrap);
 
   // -- Layout Mode Section --
